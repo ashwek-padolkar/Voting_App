@@ -101,7 +101,7 @@ router.get('/profile', jwtAuthMiddleware, async (req, res) => {
 // Update Password
 router.put('/profile/password', jwtAuthMiddleware, async (req, res) => {
   try {
-    const userId = req.user;       // Extract the id from the token.
+    const userId = req.user.id;       // Extract the id from the token.
     const {currentPassword, newPassword} = req.body;  // Extract the current and new password from the request body.
 
     // Find the user by userId
@@ -109,11 +109,11 @@ router.put('/profile/password', jwtAuthMiddleware, async (req, res) => {
 
     // If password does not match, return error
     if(!(await user.comparePassword(currentPassword))) {
-      return res.status(401).json( {error: 'Invalid Aadharcard Number and password'} );
+      return res.status(401).json( {error: 'Invalid password'} );
     }
 
     // Update the user's password
-    user.password = newPassword; // Update the password from the person.
+    user.password = newPassword; // Update the password.
     await user.save();
 
     console.log('password updated');
